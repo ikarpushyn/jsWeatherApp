@@ -3,24 +3,28 @@ const api = {
   base: "http://api.openweathermap.org/data/2.5/",
 };
 
-const searchbox = document.querySelector(".search-box");
+const searchbox = document.querySelector("#autocomplete");
 searchbox.addEventListener("keypress", setQuery);
+const outBlur = document.querySelector('input[type="text"]');
+
+outBlur.addEventListener("focusout", setQuery);
 
 function setQuery(evt) {
-  if (evt.keyCode == 13) {
+  if (evt.keyCode == 13 || evt.keyCode == 32) {
+    getResults(searchbox.value);
+  } 
+  if (outBlur) {
     getResults(searchbox.value);
   }
 }
 
-
-  function getResults(query) {
-    fetch(`${api.base}weather?q=${query}&units=metric&APPID=${api.key}`)
-      .then((weather) => {
-        return weather.json();
-      })
-      .then(displayResults);
-  }
-
+function getResults(query) {
+  fetch(`${api.base}weather?q=${query}&units=metric&APPID=${api.key}`)
+    .then((weather) => {
+      return weather.json();
+    })
+    .then(displayResults);
+}
 
 function displayResults(weather) {
   let city = document.querySelector(".location .city");
@@ -77,36 +81,36 @@ function dateBuilder(d) {
 
 ///////////
 
-
 function initMap() {
   const componentForm = [
-    'location',
-    'locality',
-    'administrative_area_level_1',
-    'country',
-    'postal_code',
+    "location",
+    "locality",
+    "administrative_area_level_1",
+    "country",
+    "postal_code",
   ];
-  const autocompleteInput = document.getElementById('autocomplete');
+  const autocompleteInput = document.getElementById("autocomplete");
   const autocomplete = new google.maps.places.Autocomplete(autocompleteInput);
-  autocomplete.addListener('place_changed', function () {
+  autocomplete.addListener("place_changed", function () {
     const place = autocomplete.getPlace();
     if (!place.geometry) {
       // User entered the name of a Place that was not suggested and
       // pressed the Enter key, or the Place Details request failed.
-      window.alert('No details available for input: \'' + place.name + '\'');
+      window.alert("No details available for input: '" + place.name + "'");
       return;
     }
     fillInAddress(place);
   });
 
-  function fillInAddress(place) {  // optional parameter
+  function fillInAddress(place) {
+    // optional parameter
     const addressNameFormat = {
-      'street_number': 'short_name',
-      'route': 'long_name',
-      'locality': 'long_name',
-      'administrative_area_level_1': 'short_name',
-      'country': 'long_name',
-      'postal_code': 'short_name',
+      street_number: "short_name",
+      route: "long_name",
+      locality: "long_name",
+      administrative_area_level_1: "short_name",
+      country: "long_name",
+      postal_code: "short_name",
     };
     const getAddressComp = function (type) {
       for (const component of place.address_components) {
@@ -116,11 +120,11 @@ function initMap() {
       }
       return input;
     };
-    document.getElementById('autocomplete').value = getAddressComp('street_number') + ' '
-              + getAddressComp('route');
+    document.getElementById("autocomplete").value =
+      getAddressComp("street_number") + " " + getAddressComp("route");
     for (const component of componentForm) {
       // Location field is handled separately above as it has different logic.
-      if (component !== 'autocomplete') {
+      if (component !== "autocomplete") {
         document.getElementById(component).value = getAddressComp(component);
       }
     }
