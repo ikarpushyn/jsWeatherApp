@@ -7,7 +7,8 @@
 body {
   font-family: "montserrat", sans-serif;
   background-image: url(/img/day-bg.jpg);
-  background-size: top center;
+  background-size:  cover ;
+  background-repeat: no-repeat ;
 }
 
 .app-wrap {
@@ -94,3 +95,4 @@ main {
 }
 
 /*  */
+
