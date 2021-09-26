@@ -2,18 +2,19 @@ const api = {
   key: "379fcb6791d8900c886ba13c1faf369a",
   base: "http://api.openweathermap.org/data/2.5/",
 };
-const searchbox = document.querySelector("#autocomplete");
+
+
+const searchbox = document.getElementById("pac-input");
 searchbox.addEventListener("keypress", setQuery);
 
-const outBlur = document.querySelector('input[type="city_search"]');
-outBlur.addEventListener("focusout", setQuery);
+// const outBlur = document.querySelector('input[type="city_search"]');
+// outBlur.addEventListener("focusout", setQuery);
 
-function setQuery(evt) {
-  if (evt.keyCode == 13 || evt.keyCode == 32 || outBlur) {
-    getResults(searchbox.value);
-  }
-}
-
+// function setQuery(evt) {
+//   if (evt.keyCode == 13 || evt.keyCode == 32 || outBlur) {
+//     getResults(searchbox.value);
+//   }
+// }
 function getResults(query) {
   fetch(`${api.base}weather?q=${query}&units=metric&APPID=${api.key}`)
     .then((weather) => {
@@ -23,7 +24,6 @@ function getResults(query) {
 }
 
 function displayResults(weather) {
-
   let city = document.querySelector(".location .city");
   city.innerText = `${weather.name}, ${weather.sys.country}`;
 
@@ -42,10 +42,12 @@ function displayResults(weather) {
     weather.main.temp_max
   )}°c`;
 
-  if (temp.innerHTML >= '17') {
-    document.querySelector('body').style.backgroundImage = 'url(/img/day-bg.jpg)';
-  } else if (temp.innerHTML <= '17') {
-    document.querySelector('body').style.backgroundImage = 'url(/img/night-bg.jpg)';
+  if (temp.innerHTML >= "17") {
+    document.querySelector("body").style.backgroundImage =
+      "url(/img/day-bg.jpg)";
+  } else if (temp.innerHTML <= "17") {
+    document.querySelector("body").style.backgroundImage =
+      "url(/img/night-bg.jpg)";
   }
 }
 
@@ -78,7 +80,7 @@ function dateBuilder(d) {
   let date = d.getDate();
   let month = months[d.getMonth()];
   let year = d.getFullYear();
-
+  
   return `${day} ${date} ${month} ${year}`;
 }
 ///////////
@@ -91,43 +93,24 @@ function initMap() {
   //   "country",
   //   "postal_code",
   // ];
-  const autocompleteInput = document.getElementById("autocomplete");
+  const autocompleteInput = document.getElementById("pac-input");
   const autocomplete = new google.maps.places.Autocomplete(autocompleteInput);
   autocomplete.addListener("place_changed", function () {
+    getResults(searchbox.value);
+
     const place = autocomplete.getPlace();
+
+    
+
     if (!place.geometry) {
       // User entered the name of a Place that was not suggested and
       // pressed the Enter key, or the Place Details request failed.
       window.alert("No details available for input: '" + place.name + "'");
       return;
     }
-    // fillInAddress(place);
+
   });
 
-  // function fillInAddress(place) {
-  //   // optional parameter
-  //   const addressNameFormat = {
-  //     street_number: "short_name",
-  //     route: "long_name",
-  //     locality: "long_name",
-  //     administrative_area_level_1: "short_name",
-  //     country: "long_name",
-  //     postal_code: "short_name",
-  //   };
-  //   const getAddressComp = function (type) {
-  //     for (const component of place.address_components) {
-  //       if (component.types[0] === type) {
-  //         return component[addressNameFormat[type]];
-  //       }
-  //     }
-  //     return input;
-  //   };
-  //   document.getElementById("autocomplete").value = getAddressComp("street_number") + " " + getAddressComp("route");
-  //   for (const component of componentForm) {
-  //     // Location field is handled separately above as it has different logic.
-  //     if (component !== "autocomplete") {
-  //       document.getElementById(component).value = getAddressComp(component);
-  //     }
-  //   }
-  // }
+
+
 }

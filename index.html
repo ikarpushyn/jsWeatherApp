@@ -10,16 +10,15 @@
 
   <body>
     <div  class="app-wrap">
-      <header>
+      <header id="pac-container">
         <input
-          id="autocomplete"
+          id="pac-input"
           type="city_search"
           class="search-box"
-          placeholder="Search for a city..."
-          value="";
+          placeholder="Search for a city"
         />
       </header>
-      <main>
+      <main >
         <section class="location">
           <div class="city"> </div>
           <div class="date"> </div>
@@ -31,6 +30,11 @@
         </div>
       </main>
     </div>
+
+    <div id="map"></div>
+    <div id="infowindow-content">
+    </div>
+
     <script src="/script.js"></script>
     <script
       defer
